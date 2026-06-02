@@ -1,7 +1,6 @@
 package com.example.lvluptemplate.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,34 +9,35 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.lvluptemplate.components.MiniPlayerComponent
 import com.example.lvluptemplate.components.SimpleBottomBar
 import com.example.lvluptemplate.components.SongResultRow
+import com.example.lvluptemplate.ui.theme.viewmodels.LvlUpViewModel
 
-
-@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavController, viewModel: LvlUpViewModel) {
 
     var searchQuery by remember { mutableStateOf("") }
+    val searchResults by viewModel.searchResults.collectAsState()
 
+    // Lanza la búsqueda reactiva en la BD cuando cambia el texto
+    LaunchedEffect(searchQuery) {
+        viewModel.search(searchQuery)
+    }
 
     Scaffold(
         bottomBar = {
-            Column() {
+            Column {
                 MiniPlayerComponent()
-                SimpleBottomBar()
-            } }
-    ) {
-        paddingValues ->
+                SimpleBottomBar(navController = navController)            }
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -45,7 +45,6 @@ fun SearchScreen() {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-
             Text(
                 text = "Search",
                 color = Color.White,
@@ -54,14 +53,13 @@ fun SearchScreen() {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            //BARRA DE NAVEGACIÓN
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                placeholder = { Text("Artists or songs...", color = Color.Gray) },
+                placeholder = { Text("Artists, songs, albums...", color = Color.Gray) },
                 leadingIcon = {
                     Icon(Icons.Default.Search, contentDescription = "Search Icon", tint = Color.Gray)
                 },
@@ -76,9 +74,18 @@ fun SearchScreen() {
                     unfocusedTextColor = Color.White
                 )
             )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(searchResults) { song ->
+                    SongResultRow(
+                        song = song,
+                        onClick = { navController.navigate("song_screen/${song.id}") }
+                    )
+                }
+            }
         }
     }
-
 }
-
-

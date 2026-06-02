@@ -19,15 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-data class Song (val title: String, val artist: String)
+import com.example.lvluptemplate.data.local.entities.SongEntity
 
 @Composable
-fun SongResultRow(song: Song) {
+fun SongResultRow(song: SongEntity, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Acción al seleccionar canción */ }
+            .clickable { onClick() }
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

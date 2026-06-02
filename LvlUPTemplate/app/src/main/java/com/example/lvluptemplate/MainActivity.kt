@@ -3,17 +3,27 @@ package com.example.lvluptemplate
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import com.example.lvluptemplate.screen.MainScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lvluptemplate.data.local.LvlUpDatabase
+import com.example.lvluptemplate.navigation.AppNavigation
 import com.example.lvluptemplate.ui.theme.LvlUPTemplateTheme
+import com.example.lvluptemplate.ui.theme.viewmodels.LvlUpViewModel
+import com.example.lvluptemplate.ui.theme.viewmodels.LvlUpViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            LvlUPTemplateTheme {
-                MainScreen()
+
+            val database = LvlUpDatabase.getDatabase(applicationContext)
+            val dao = database.lvlUpDao()
+
+            val viewModel: LvlUpViewModel = viewModel(
+                factory = LvlUpViewModelFactory(dao)
+            )
+
+            LvlUPTemplateTheme() {
+                AppNavigation(viewModel = viewModel)
             }
         }
     }

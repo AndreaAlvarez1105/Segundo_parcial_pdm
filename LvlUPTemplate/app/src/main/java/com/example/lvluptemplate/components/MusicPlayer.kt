@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,9 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.lvluptemplate.ui.theme.viewmodels.LvlUpViewModel
 
 @Composable
-fun MiniPlayerComponent() {
+fun MiniPlayerComponent(viewModel: LvlUpViewModel? = null) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -58,23 +57,25 @@ fun MiniPlayerComponent() {
                     fontSize = 12.sp
                 )
             }
-            IconButton(onClick = { /* Añadir a Favoritos */ }) {
+            IconButton(onClick = {
+                viewModel?.addSongToPlaylist(4L, 1L)
+                Toast.makeText(context, "Guardado en Favoritos", Toast.LENGTH_SHORT).show()
+            }) {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "Play",
+                    contentDescription = "Favorite",
                     tint = Color.White
                 )
             }
         }
 
-
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /* Mover a la canción anterior */ }) {
+            IconButton(onClick = {  }) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Play",
+                    contentDescription = "Previous",
                     tint = Color.White
                 )
             }
@@ -88,9 +89,9 @@ fun MiniPlayerComponent() {
                     tint = Color.White
                 )
             }
-            IconButton(onClick = { /* Mover  a la siguiente canción */ }) {
+            IconButton(onClick = {  }) {
                 Icon(
-                    imageVector = Icons.Filled.KeyboardArrowRight,
+                    imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = "Next",
                     tint = Color.White
                 )

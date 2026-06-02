@@ -1,15 +1,7 @@
 package com.example.lvluptemplate.components
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
@@ -24,16 +16,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lvluptemplate.screen.Playlist
+import com.example.lvluptemplate.data.local.entities.PlaylistWithSongs
 
 @Composable
-fun PlaylistCardComponent(playlist: Playlist) {
+fun PlaylistCardComponent(playlistWithSongs: PlaylistWithSongs, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {  }
+            .clickable { onClick() }
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,7 +44,7 @@ fun PlaylistCardComponent(playlist: Playlist) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = playlist.name,
+            text = playlistWithSongs.playlist.name,
             color = Color.White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
@@ -61,7 +52,7 @@ fun PlaylistCardComponent(playlist: Playlist) {
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = "${playlist.tracksCount} tracks",
+            text = "${playlistWithSongs.songs.size} tracks",
             color = Color.Gray,
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 2.dp)
